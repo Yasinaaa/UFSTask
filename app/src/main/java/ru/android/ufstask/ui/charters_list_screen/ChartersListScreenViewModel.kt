@@ -29,7 +29,7 @@ class ChartersListScreenViewModel(private val repository: RootRepository) : View
 //            }
 //        }
         repository.getAllHouses { list ->
-            data.value = data!!.value!!.plus(list)
+            data.value = data.value!!.plus(list)
 //            data.value = data.value.plus(list)
         }
     }

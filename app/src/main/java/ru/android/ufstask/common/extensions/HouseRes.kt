@@ -3,6 +3,7 @@ package ru.android.ufstask.common.extensions
 //import ru.android.ufstask.AppConfig
 //import ru.android.ufstask.common.model.HousesTabs
 import ru.android.ufstask.data.local.entities.House
+import ru.android.ufstask.data.local.entities.HouseItem
 import ru.android.ufstask.data.remote.res.HouseRes
 
 /*
@@ -24,7 +25,11 @@ fun HouseRes.transformToHouse() = House(
     diedOut = this.diedOut,
     ancestralWeapons = this.ancestralWeapons
 )
-
+fun HouseRes.transformToHouseItem() = HouseItem (
+    id = "namae",
+    name = this.name,
+    region = this.region
+)
 //fun HouseRes.getShortName() = when (AppConfig.NEED_HOUSES.indexOf(name)) {
 //    0 -> HousesTabs.STARK.tabName
 //    1 -> HousesTabs.LANNISTER.tabName

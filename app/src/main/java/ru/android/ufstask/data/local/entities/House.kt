@@ -1,6 +1,8 @@
 package ru.android.ufstask.data.local.entities
 
+import android.os.Parcelable
 import androidx.room.*
+import kotlinx.android.parcel.Parcelize
 
 /*
  * Created by yasina on 2020-01-14
@@ -50,7 +52,12 @@ data class House(
     @ColumnInfo(name = "ancestralWeapons")
     val ancestralWeapons: List<String>
 )
-
+@Parcelize
+data class HouseItem(
+    val id: String,
+    val region: String,
+    val name: String
+) : Parcelable
 
 class ListConverter {
     @TypeConverter
