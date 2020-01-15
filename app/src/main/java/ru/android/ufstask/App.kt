@@ -8,7 +8,7 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import ru.android.ufstask.database.DatabaseModule
 import ru.android.ufstask.repositories.RootRepository
-import ru.android.ufstask.ui.charters_list_screen.ChartersListScreenViewModel
+import ru.android.ufstask.ui.MainViewModel
 
 /*
  * Created by yasina on 2020-01-14
@@ -20,7 +20,7 @@ class App: Application(){
     }
 
     private var viewModels = module {
-        viewModel { ChartersListScreenViewModel(get()) }
+        viewModel { MainViewModel(get()) }
     }
 
     override fun onCreate() {

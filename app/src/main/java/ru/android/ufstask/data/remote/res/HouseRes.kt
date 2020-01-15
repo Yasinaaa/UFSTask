@@ -8,7 +8,6 @@ import kotlinx.android.parcel.Parcelize
 */
 @Parcelize
 data class HouseRes(
-    val url: String,
     val name: String,
     val region: String,
     val coatOfArms: String,

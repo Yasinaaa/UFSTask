@@ -8,6 +8,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+/*
+ * Created by yasina on 2020-01-14
+*/
 object NetworkModule {
 
     const val BASE_URL = "https://www.anapioficeandfire.com/api/"

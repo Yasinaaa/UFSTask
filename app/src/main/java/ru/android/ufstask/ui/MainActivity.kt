@@ -7,29 +7,28 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import ru.android.ufstask.R
-import ru.android.ufstask.common.extensions.transformToHouse
 import ru.android.ufstask.common.extensions.transformToHouseItem
-import ru.android.ufstask.data.local.entities.CharacterItem
 import ru.android.ufstask.data.local.entities.HouseItem
-import ru.android.ufstask.data.local.entities.RelativeCharacter
-import ru.android.ufstask.ui.charters_list_screen.ChartersListScreenViewModel
 
+/*
+ * Created by yasina on 2020-01-14
+*/
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: ChartersListScreenViewModel by viewModel()
+    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.d("dd", "dd")
-        val adapter = CharactersAdapter{
+
+        val adapter = MainAdapter{
 
         }
         house_characters_recycler_view.adapter = adapter
+        house_characters_recycler_view.itemAnimator!!.changeDuration = 0
 
         viewModel.getData().observe(this, Observer {
             it?.let {
-                Log.d("dddddfvgb", "it.size=${it.size}")
                 var characters: MutableList<HouseItem> = mutableListOf()
 
                 it.forEach { i ->

@@ -3,6 +3,9 @@ package ru.android.ufstask.database
 import android.content.Context
 import androidx.room.Room
 
+/*
+ * Created by yasina on 2020-01-14
+*/
 object DatabaseModule {
 
     lateinit var context: Context

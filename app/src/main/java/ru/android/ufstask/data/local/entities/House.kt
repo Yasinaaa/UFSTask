@@ -10,8 +10,8 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "house_table")
 data class House(
 
-    @PrimaryKey(autoGenerate = false)
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long,
 
     @ColumnInfo(name = "name")
     val name: String,
@@ -52,9 +52,10 @@ data class House(
     @ColumnInfo(name = "ancestralWeapons")
     val ancestralWeapons: List<String>
 )
+
 @Parcelize
 data class HouseItem(
-    val id: String,
+    val id: Long,
     val region: String,
     val name: String
 ) : Parcelable
