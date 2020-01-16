@@ -7,20 +7,24 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import ru.android.ufstask.database.DatabaseModule
-import ru.android.ufstask.repositories.RootRepository
-import ru.android.ufstask.ui.MainViewModel
+import ru.android.ufstask.repositories.DbRepositoryImpl
+import ru.android.ufstask.repositories.NetRepositoryImpl
+import ru.android.ufstask.ui.NewsViewModel
+import ru.android.ufstask.usecase.NewsDbUseCase
+import ru.android.ufstask.usecase.NewsNetUseCase
 
 /*
  * Created by yasina on 2020-01-14
 */
 class App: Application(){
 
-    private var appModule = module {
-        single { RootRepository }
-    }
-
     private var viewModels = module {
-        viewModel { MainViewModel(get()) }
+
+        viewModel { NewsViewModel(
+            NewsNetUseCase(NetRepositoryImpl()),
+            NewsDbUseCase(DbRepositoryImpl()),
+            applicationContext)
+        }
     }
 
     override fun onCreate() {
@@ -33,7 +37,6 @@ class App: Application(){
             androidContext(this@App)
             modules(
                 listOf(
-                    appModule,
                     viewModels
                 )
             )

@@ -17,18 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/iv_item_character_icon"
-            android:layout_width="@dimen/icon_diameter"
-            android:layout_height="@dimen/icon_diameter"
-            android:layout_marginStart="@dimen/base_margin"
-            android:layout_marginTop="@dimen/base_margin"
-            android:layout_marginBottom="@dimen/base_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/lanister_icon"/>
-
         <TextView
             android:id="@+id/tv_item_character_name"
             android:layout_width="0dp"
@@ -38,9 +26,10 @@
             android:layout_marginEnd="@dimen/base_margin"
             android:text="@{list_item_character_name}"
             android:textStyle="bold"
+            tools:text="fffffffffff"
             android:textColor="@color/color_primary_dark"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_item_character_icon"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -55,10 +44,18 @@
             android:textColor="@color/color_primary"
             android:maxLines="2"
             android:ellipsize="end"
-            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="fffffffffff"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_item_character_icon"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_item_character_name" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_item_character_description"
+            android:background="@android:color/darker_gray"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

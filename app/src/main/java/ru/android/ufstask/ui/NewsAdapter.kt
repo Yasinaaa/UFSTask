@@ -7,23 +7,23 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.android.ufstask.R
-import ru.android.ufstask.data.local.entities.HouseItem
+import ru.android.ufstask.models.ArticleItem
 import ru.android.ufstask.databinding.ItemCharacterBinding
 
 /*
  * Created by yasina on 2020-01-14
 */
-class MainAdapter(
-    private val clickListener: (HouseItem) -> Unit
-) : ListAdapter<HouseItem, MainAdapter.ViewHolder>(
-    CharacterDiffCallback()
+class NewsAdapter(
+    private val clickListener: (ArticleItem) -> Unit
+) : ListAdapter<ArticleItem, NewsAdapter.ViewHolder>(
+    ArticleDiffCallback()
 ) {
 
-    init {
-        setHasStableIds(true)
-    }
+//    init {
+//        setHasStableIds(true)
+//    }
 
-    var characters: MutableList<HouseItem> = mutableListOf()
+    var characters: MutableList<ArticleItem> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate<ItemCharacterBinding>(
@@ -46,24 +46,24 @@ class MainAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
-            character: HouseItem,
-            clickListener: (HouseItem) -> Unit
+            character: ArticleItem,
+            clickListener: (ArticleItem) -> Unit
         ) {
-            binding.listItemCharacterName = if (character.name.isEmpty()) "Information is unknown"
-            else character.name
-            binding.listItemCharacterInfo = character.region
+            binding.listItemCharacterName = if (character.title!!.isEmpty()) "Information is unknown"
+            else character.title
+            binding.listItemCharacterInfo = character.publishedAt!!
             binding.root.setOnClickListener{ clickListener.invoke(character) }
         }
     }
 }
 
-class CharacterDiffCallback : DiffUtil.ItemCallback<HouseItem>() {
+class ArticleDiffCallback : DiffUtil.ItemCallback<ArticleItem>() {
 
-    override fun areItemsTheSame(oldItem: HouseItem, newItem: HouseItem): Boolean {
-        return oldItem.id == newItem.id
+    override fun areItemsTheSame(oldItem: ArticleItem, newItem: ArticleItem): Boolean {
+        return oldItem.title.equals(newItem.title)
     }
 
-    override fun areContentsTheSame(oldItem: HouseItem, newItem: HouseItem): Boolean {
-        return oldItem.id == newItem.id
+    override fun areContentsTheSame(oldItem: ArticleItem, newItem: ArticleItem): Boolean {
+        return oldItem.title.equals(newItem.title)
     }
 }

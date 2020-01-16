@@ -12,10 +12,10 @@ object DatabaseModule {
 
     fun getInstanse() = providesDao(provideDatabase(context))
 
-    fun provideDatabase(context: Context) = Room
+    private fun provideDatabase(context: Context) = Room
         .databaseBuilder(context, AppDatabase::class.java, "app_database")
         .build()
 
-    fun providesDao(database: AppDatabase) = database.appDatabaseDao
+    private fun providesDao(database: AppDatabase) = database.appDatabaseDao
 
 }
