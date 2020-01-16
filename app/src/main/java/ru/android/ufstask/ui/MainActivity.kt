@@ -30,10 +30,10 @@ class MainActivity : AppCompatActivity() {
         viewModel.syncData()
 
         swl.setOnRefreshListener {
-            viewModel.updateFromNet()
+            viewModel.getNewsFromNet()
         }
 
-        viewModel.getData().observe(this, Observer<LoadResult<MutableList<ArticleItem>>> {
+        viewModel.updateData().observe(this, Observer<LoadResult<MutableList<ArticleItem>>> {
             when(it){
                 is LoadResult.Loading -> {
                     swl.isRefreshing = true

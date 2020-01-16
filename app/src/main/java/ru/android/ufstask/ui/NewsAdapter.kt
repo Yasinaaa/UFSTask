@@ -51,7 +51,7 @@ class NewsAdapter(
         ) {
             binding.listItemCharacterName = if (character.title!!.isEmpty()) "Information is unknown"
             else character.title
-            binding.listItemCharacterInfo = character.publishedAt!!
+            binding.listItemCharacterInfo = character.publishedAt
             binding.root.setOnClickListener{ clickListener.invoke(character) }
         }
     }

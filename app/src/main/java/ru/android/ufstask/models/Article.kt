@@ -79,7 +79,7 @@ fun ArticleRes.transformToArticle() =
         description = this.description,
         url = this.url,
         urlToImage = this.urlToImage,
-        publishedAt = this.publishedAt!!.convertToDate()
+        publishedAt = this.publishedAt.convertToDate()
     )
 
 fun MutableList<ArticleRes>.transformToArticleList() : MutableList<Article>{
@@ -97,20 +97,24 @@ fun Article.transformToArticle() =
         description = this.description,
         url = this.url,
         urlToImage = this.urlToImage,
-        publishedAt = this.publishedAt!!.toSimpleString()
+        publishedAt = this.publishedAt!!.toParsedString()
     )
 
-fun Date.toSimpleString() : String {
-    val format = SimpleDateFormat("HH:mm:ss dd.MM.yyyy")
-    return format.format(this)
+fun Date?.toParsedString() : String {
+    return simpleDateFormat.format(this)
 }
 
-fun String.convertToDate(): Date? {
-    var df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+fun Date?.toDatabaseString() : String {
+    return standardDateFormat.format(this!!)
+}
+
+fun String?.convertToDate(): Date? {
     return if (this != null) {
         try {
-            return df.parse(this)
+            return standardDateFormat.parse(this)
         } catch (e: ParseException) {
+            e.printStackTrace()
+        } catch (e: ArrayIndexOutOfBoundsException){
             e.printStackTrace()
         }
         null
@@ -118,6 +122,11 @@ fun String.convertToDate(): Date? {
         null
     }
 }
+
+
+private var standardDateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+private var simpleDateFormat: DateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+
 
 
 

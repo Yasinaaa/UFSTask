@@ -2,13 +2,12 @@ package ru.android.ufstask.ui
 
 import android.content.Context
 import androidx.lifecycle.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.android.ufstask.models.ArticleItem
 import ru.android.ufstask.extensions.isNetworkAvailable
 import java.util.*
 import ru.android.ufstask.helper.ResultWrapper.*
 import ru.android.ufstask.models.ErrorResponse
+import ru.android.ufstask.models.NewsRes
 import ru.android.ufstask.usecase.NewsDbUseCase
 import ru.android.ufstask.usecase.NewsNetUseCase
 
@@ -25,63 +24,59 @@ class NewsViewModel(
 
     init {
         data.value = LoadResult.Loading(mutableListOf())
-        updateFromNet()
+        getNewsFromNet()
     }
 
     fun syncData() : LiveData<LoadResult<Boolean>>{
         val result : MutableLiveData<LoadResult<Boolean>> = MutableLiveData()
-
         result.value = LoadResult.Loading(false)
-
-        viewModelScope.launch(Dispatchers.IO) {
-//            repository.getAllNewsFromDb {
-//
-//            }
-            if (!applicationContext.isNetworkAvailable){
-                result.postValue(LoadResult.Error("Интернет недоступен, приложение может работать некорректно"))
-                return@launch
-            }
-
-            result.postValue(LoadResult.Success(true))
-
+        
+        if (!applicationContext.isNetworkAvailable){
+            result.postValue(LoadResult.Error("Интернет недоступен, приложение будет работать в оффлайн режиме"))
+            //todo if first launch and db empty
+            getNewsFromDb() 
+        }else{
+            getNewsFromNet()
         }
+        
         return result
     }
 
-    fun updateFromNet(){
+    fun getNewsFromNet(){
         netUseCase.getNews(getCountry(), API_KEY) {
             when (it) {
                 is NetworkError -> showNetworkError()
                 is GenericError -> showGenericError(it.error)
-                is Success -> {
-                    dbUseCase.insertNews(it.value.articles!!){
-                        if(it){
-                            updateNews()
-                        }else{
-
-                        }
-                    }
-                }
+                is Success -> updateNewsInDb(it.value)
             }
         }
+    }
+    
+    private fun updateNewsInDb(news: NewsRes){
+        dbUseCase.insertNews(news.articles!!){
+            if(it){
+                getNewsFromDb()
+            }else{
 
+            }
+        }
     }
 
     private fun showNetworkError(){
-
+        data.postValue(LoadResult.Error("Интернет недоступен"))
     }
 
     private fun showGenericError(errorMessage: ErrorResponse?){
-
+        data.postValue(LoadResult.Error(errorMessage!!.message!!))
     }
 
-    private fun updateNews(){
+    private fun getNewsFromDb(){
         dbUseCase.getAllNews {
             data.postValue(LoadResult.Success(it))
         }
     }
 
-    fun getData(): LiveData<LoadResult<MutableList<ArticleItem>>> {
+    fun updateData(): LiveData<LoadResult<MutableList<ArticleItem>>> {
         val result = MediatorLiveData<LoadResult<MutableList<ArticleItem>>>()
         val filterF = {
             result.value = data.value
