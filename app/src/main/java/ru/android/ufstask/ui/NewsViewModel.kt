@@ -2,14 +2,18 @@ package ru.android.ufstask.ui
 
 import android.content.Context
 import androidx.lifecycle.*
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import ru.android.ufstask.models.ArticleItem
 import ru.android.ufstask.extensions.isNetworkAvailable
-import java.util.*
+
 import ru.android.ufstask.helper.ResultWrapper.*
 import ru.android.ufstask.models.ErrorResponse
 import ru.android.ufstask.models.NewsRes
 import ru.android.ufstask.usecase.NewsDbUseCase
 import ru.android.ufstask.usecase.NewsNetUseCase
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 /*
  * Created by yasina on 2020-01-14
@@ -21,19 +25,26 @@ class NewsViewModel(
     : ViewModel() {
 
     private var data = MutableLiveData<LoadResult<MutableList<ArticleItem>>>()
+    private val disposable: Disposable
 
     init {
-        data.value = LoadResult.Loading(mutableListOf())
+        data.value = LoadResult.Loading()
         getNewsFromNet()
+
+        disposable =
+            Observable.interval(2, TimeUnit.MINUTES)
+                .doOnNext {
+                    syncData()
+                }
+                .subscribe()
     }
 
     fun syncData() : LiveData<LoadResult<Boolean>>{
         val result : MutableLiveData<LoadResult<Boolean>> = MutableLiveData()
-        result.value = LoadResult.Loading(false)
-        
+        data.postValue(LoadResult.Loading())
+
         if (!applicationContext.isNetworkAvailable){
             result.postValue(LoadResult.Error("Интернет недоступен, приложение будет работать в оффлайн режиме"))
-            //todo if first launch and db empty
             getNewsFromDb() 
         }else{
             getNewsFromNet()
@@ -57,7 +68,7 @@ class NewsViewModel(
             if(it){
                 getNewsFromDb()
             }else{
-
+                data.postValue(LoadResult.Error("Не получилось сохранить данные в БД"))
             }
         }
     }
@@ -72,7 +83,10 @@ class NewsViewModel(
 
     private fun getNewsFromDb(){
         dbUseCase.getAllNews {
-            data.postValue(LoadResult.Success(it))
+            if(it.isNotEmpty())
+                data.postValue(LoadResult.Success(it))
+            else
+                data.postValue(LoadResult.Error("Пустой список"))
         }
     }
 
@@ -91,6 +105,11 @@ class NewsViewModel(
         return country.toLowerCase()
     }
 
+    override fun onCleared() {
+        disposable.dispose()
+        super.onCleared()
+    }
+
     companion object {
         private const val API_KEY = "27ac93231d68496da29573697ec06b91"
     }
@@ -103,6 +122,6 @@ sealed class LoadResult<T>(
     val errorMessage: String? = null
 ){
     class Success<T>(data: T?) : LoadResult<T>(data)
-    class Loading<T>(data: T?) : LoadResult<T>(data)
+    class Loading<T> : LoadResult<T>(null)
     class Error<T>(message: String) : LoadResult<T>(errorMessage = message)
 }

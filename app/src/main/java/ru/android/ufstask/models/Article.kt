@@ -101,7 +101,7 @@ fun Article.transformToArticle() =
     )
 
 fun Date?.toParsedString() : String {
-    return simpleDateFormat.format(this)
+    return SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(this!!)
 }
 
 fun Date?.toDatabaseString() : String {
@@ -125,7 +125,6 @@ fun String?.convertToDate(): Date? {
 
 
 private var standardDateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-private var simpleDateFormat: DateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
 
 
 

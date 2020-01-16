@@ -19,9 +19,9 @@ class NewsAdapter(
     ArticleDiffCallback()
 ) {
 
-//    init {
-//        setHasStableIds(true)
-//    }
+    init {
+        setHasStableIds(true)
+    }
 
     var characters: MutableList<ArticleItem> = mutableListOf()
 

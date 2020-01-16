@@ -15,26 +15,24 @@ class NewsNetUseCase(val repository: NetRepositoryImpl){
     private val localScope = CoroutineScope(Dispatchers.Main + coroutineJob)
 
     fun getNews(country: String, apiKey: String, result: (houses: ResultWrapper<NewsRes>) -> Unit){
-        startCoroutineTimer(delayMillis = 0, repeatMillis = 60000 * 2) {
-            localScope.launch{
-                val task = async(Dispatchers.IO) {
-                    return@async repository.getCurrentNews(country, apiKey)
-                }
-                result(task.await())
-            }//todo trycatch
+        localScope.launch{
+            val task = async(Dispatchers.IO) {
+                return@async repository.getCurrentNews(country, apiKey)
+            }
+            result(task.await())
         }
     }
 
-    fun startCoroutineTimer(delayMillis: Long = 0, repeatMillis: Long = 0, action: () -> Unit) = GlobalScope.launch {
-        delay(delayMillis)
-        if (repeatMillis > 0) {
-            while (true) {
-                action()
-                delay(repeatMillis)
-            }
-        } else {
-            action()
-        }
-    }
+//    fun startCoroutineTimer(delayMillis: Long = 0, repeatMillis: Long = 0, action: () -> Unit) = GlobalScope.launch {
+//        delay(delayMillis)
+//        if (repeatMillis > 0) {
+//            while (true) {
+//                action()
+//                delay(repeatMillis)
+//            }
+//        } else {
+//            action()
+//        }
+//    }
 
 }

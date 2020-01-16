@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.syncData()
 
         swl.setOnRefreshListener {
-            viewModel.getNewsFromNet()
+            viewModel.syncData()
         }
 
         viewModel.updateData().observe(this, Observer<LoadResult<MutableList<ArticleItem>>> {
@@ -42,8 +42,6 @@ class MainActivity : AppCompatActivity() {
                     swl.isRefreshing = false
                     adapter.characters = it.data!!
                     adapter.notifyDataSetChanged()
-
-                    Log.d(MainActivity::class.simpleName, it.data.size.toString()) //todo
                 }
                 is LoadResult.Error -> {
                     swl.isRefreshing = false

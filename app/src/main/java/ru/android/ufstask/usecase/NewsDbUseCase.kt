@@ -18,7 +18,6 @@ class NewsDbUseCase(val repository: DbRepositoryImpl){
         localScope.launch {
             try {
                 val task = async(Dispatchers.IO) {
-
                     repository.insertNews(news.transformToArticleList()){
                         return@insertNews
                     }
